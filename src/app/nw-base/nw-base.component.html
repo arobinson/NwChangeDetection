@@ -1,0 +1,21 @@
+<span class="nw-name">{{name}} – {{componentStructure.componentType}}</span>
+<span class="nw-depth">{{depth}}</span>
+<span class="nw-options">
+  <h2>Options</h2>
+  <label>
+    Change strategy: <select [(ngModel)]="componentStructure.componentType">
+      <option [value]="NwComponentType.Default">Default</option>
+      <option [value]="NwComponentType.OnPush">Push</option>
+    </select>
+  </label>
+</span>
+<div class="nw-children" *ngIf="componentStructure.children">
+  <ng-container *ngFor="let child of componentStructure.children">
+    <app-nw-default *ngIf="child.componentType == NwComponentType.Default"
+      [depth]="depth + 1"
+      [componentStructure]="child"></app-nw-default>
+    <app-nw-push *ngIf="child.componentType == NwComponentType.OnPush"
+      [depth]="depth + 1"
+      [componentStructure]="child"></app-nw-push>
+  </ng-container>
+</div>
