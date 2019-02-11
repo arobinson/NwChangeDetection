@@ -11,15 +11,7 @@ export class AppComponent implements OnInit, AfterContentChecked {
   componentStructure: NwComponentStructure;
   title = 'nw-change-detection';
   NwComponentType = NwComponentType;
-  globalClickCountInternal = 0;
-
-  get globalClickCount(): number {
-    return this.globalClickCountInternal;
-  }
-  set globalClickCount(value: number) {
-    console.error('set:', value);
-    this.globalClickCountInternal = value;
-  }
+  globalClickCount = 0;
 
   constructor(private stats: NwStatisticsService) {
   }
