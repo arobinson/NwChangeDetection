@@ -1,72 +1,45 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, OnInit } from '@angular/core';
 import { NwComponentStructure, NwComponentType } from './nw-model';
+import { NwStatisticsService } from './services/nw-statistics.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterContentChecked {
   componentStructure: NwComponentStructure;
   title = 'nw-change-detection';
-  changeDetectionCount: number = 0;
   NwComponentType = NwComponentType;
+
+  constructor(private stats: NwStatisticsService) {
+  }
 
   ngOnInit(): void {
     const sharedData = {};
     this.componentStructure = {
       name: 'root',
+      componentCreationCount: 0,
       componentType: NwComponentType.Default,
       inputData: sharedData,
       children: [
         {
           name: 'A',
           componentType: NwComponentType.Default,
+          componentCreationCount: 0,
           inputData: sharedData,
           children: [
             {
               name: '1',
               componentType: NwComponentType.Default,
+              componentCreationCount: 0,
               inputData: sharedData,
-              children: [
-                {
-                  name: 'a',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                },
-                {
-                  name: 'b',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                },
-                {
-                  name: 'c',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                }
-              ]
             },
             {
               name: '2',
               componentType: NwComponentType.Default,
               inputData: sharedData,
-              children: [
-                {
-                  name: 'a',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                },
-                {
-                  name: 'b',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                },
-                {
-                  name: 'c',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                }
-              ]
+              componentCreationCount: 0,
             }
           ]
         },
@@ -74,54 +47,27 @@ export class AppComponent implements OnInit {
           name: 'B',
           componentType: NwComponentType.OnPush,
           inputData: sharedData,
+          componentCreationCount: 0,
           children: [
             {
               name: '1',
               componentType: NwComponentType.OnPush,
               inputData: sharedData,
-              children: [
-                {
-                  name: 'a',
-                  componentType: NwComponentType.OnPush,
-                  inputData: sharedData,
-                },
-                {
-                  name: 'b',
-                  componentType: NwComponentType.OnPush,
-                  inputData: sharedData,
-                },
-                {
-                  name: 'c',
-                  componentType: NwComponentType.OnPush,
-                  inputData: sharedData,
-                }
-              ]
+              componentCreationCount: 0,
             },
             {
               name: '2',
-              componentType: NwComponentType.Default,
+              componentType: NwComponentType.OnPush,
               inputData: sharedData,
-              children: [
-                {
-                  name: 'a',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                },
-                {
-                  name: 'b',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                },
-                {
-                  name: 'c',
-                  componentType: NwComponentType.Default,
-                  inputData: sharedData,
-                }
-              ]
+              componentCreationCount: 0,
             }
           ]
         }
       ]
     };
+  }
+
+  ngAfterContentChecked(): void {
+    this.stats.incrementTotalCount();
   }
 }

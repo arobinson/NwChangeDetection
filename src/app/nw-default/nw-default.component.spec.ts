@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NwComponentComponent } from './nw-component.component';
+import { NwDefaultComponent } from './nw-default.component';
 
 describe('NwComponentComponent', () => {
-  let component: NwComponentComponent;
-  let fixture: ComponentFixture<NwComponentComponent>;
+  let component: NwDefaultComponent;
+  let fixture: ComponentFixture<NwDefaultComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NwComponentComponent ]
+      declarations: [ NwDefaultComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NwComponentComponent);
+    fixture = TestBed.createComponent(NwDefaultComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

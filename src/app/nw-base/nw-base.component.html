@@ -1,21 +1,41 @@
-<span class="nw-name">{{name}} – {{componentStructure.componentType}}</span>
-<span class="nw-depth">{{depth}}</span>
-<span class="nw-options">
-  <h2>Options</h2>
+<div class="nw-name">{{name}} – {{componentStructure.componentType}}</div>
+<div class="nw-depth">{{depth}}</div>
+<div class="nw-stats">
+  <div class="nw-detached">Detached: {{detached}}</div>
+  <div class="nw-creation">Created: {{creationCount}}</div>
+  <div class="nw-creation">Changed: {{changeCount}}</div>
+  <div class="nw-creation">Checked: {{checkedCount}}</div>
+  <div class="nw-creation">Content Checked: {{contentCheckedCount}}</div>
+</div>
+<div class="nw-options">
   <label>
     Change strategy: <select [(ngModel)]="componentStructure.componentType">
       <option [value]="NwComponentType.Default">Default</option>
       <option [value]="NwComponentType.OnPush">Push</option>
     </select>
   </label>
-</span>
+  <button *ngIf="detached" (click)="reattach()">reattach</button>
+  <button *ngIf="!detached" (click)="detach()">detach</button>
+  <button (click)="markForCheck()">markForCheck</button>
+  <button (click)="detectChanges()">detectChanges</button>
+  <button #markForCheckOutsideAngular>markForCheck (outside)</button>
+  <button #detectChangesOutsideAngular>detectChanges (outside)</button>
+  <button (click)="toggleMouseMoveArea()">{{mouseArea ? 'Hide' : 'Show' }} mouse move area</button>
+</div>
+<div class="nw-mouse-area-parent">
+  <div *ngIf="mouseArea" class="nw-mouse-area" (mousemove)="onMouseMove($event)">
+    Generate mouse events on move
+  </div>
+</div>
 <div class="nw-children" *ngIf="componentStructure.children">
   <ng-container *ngFor="let child of componentStructure.children">
     <app-nw-default *ngIf="child.componentType == NwComponentType.Default"
       [depth]="depth + 1"
+      [parentName]="name"
       [componentStructure]="child"></app-nw-default>
     <app-nw-push *ngIf="child.componentType == NwComponentType.OnPush"
       [depth]="depth + 1"
+      [parentName]="name"
       [componentStructure]="child"></app-nw-push>
   </ng-container>
 </div>

@@ -1,0 +1,21 @@
+:host {
+  height: calc(100vh - 7rem);
+  position: relative;
+  overflow-x: scroll;
+}
+.nw-log-header {
+  font-weight: bold;
+  padding-top: 0.5rem;
+}
+.nw-logs {
+  overflow-y: scroll;
+  position: absolute;
+  top: 2rem;
+  bottom: 0px;
+  min-width: 100%;
+  /* background-color: yellow; */
+}
+.nw-log-message {
+  white-space: pre;
+  font-family: monospace;
+}

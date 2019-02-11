@@ -1,10 +1,12 @@
 <div class="nw-app">
-  <app-nw-header [changeDetectionCount]="changeDetectionCount" ></app-nw-header>
+  <app-nw-header></app-nw-header>
   <app-nw-logs></app-nw-logs>
-  <app-nw-default *ngIf="componentStructure.componentType == NwComponentType.Default"
-    [depth]="0"
-    [componentStructure]="componentStructure"></app-nw-default>
-  <app-nw-push *ngIf="componentStructure.componentType == NwComponentType.OnPush"
-    [depth]="0"
-    [componentStructure]="componentStructure"></app-nw-push>
+  <div class="nw-components">
+    <app-nw-default *ngIf="componentStructure.componentType == NwComponentType.Default"
+      [depth]="0"
+      [componentStructure]="componentStructure"></app-nw-default>
+    <app-nw-push *ngIf="componentStructure.componentType == NwComponentType.OnPush"
+      [depth]="0"
+      [componentStructure]="componentStructure"></app-nw-push>
+  </div>
 </div>

@@ -1,1 +1,63 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+}
+.nw-app {
+  display: grid;
+  grid-template-columns: 300px auto;
+  grid-template-rows: auto, auto;
+  margin: 4em;
+}
+app-nw-header {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row: 1;
+}
+app-nw-logs {
+  grid-column: 1;
+  grid-row: 2;
+}
+.nw-components {
+  grid-column: 2;
+  grid-row: 2;
+}
+.nw-component {
+  display: inline-block;
+  border: 1px solid black;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+.nw-component h2 {
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 0;
+}
+.nw-component[data-depth="0"] > .nw-children {
+  display: flex;
+  flex-direction: row;
+}
+.nw-component[data-depth="1"] {
+  border-color: blue;
+  border-style: dotted;
+}
+.nw-component[data-depth="2"] {
+  border-color: cyan;
+  border-style: dashed;
+}
+.nw-depth {
+  display: none;
+}
+.nw-stats {
+  display: flex;
+  flex-direction: row;
+  font-size: 75%;
+}
+.nw-stats div {
+  margin: 0.25rem 0.3rem;
+}
+.nw-mouse-area {
+  display: inline-block;
+  background-color: cornflowerblue;
+  min-height: 25px;
+  min-width: 100px;
+}
