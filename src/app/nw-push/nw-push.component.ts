@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone } from '@angular/core';
 import { NwBaseComponent } from '../nw-base/nw-base.component';
 import { NwLoggerService } from '../services/nw-logger.service';
 import { NwStatisticsService } from '../services/nw-statistics.service';
@@ -14,10 +14,17 @@ import { NwStatisticsService } from '../services/nw-statistics.service';
 })
 export class NwPushComponent extends NwBaseComponent {
   constructor(
-    cd: ChangeDetectorRef,
-    zone: NgZone,
     stats: NwStatisticsService,
+    cd: ChangeDetectorRef,
+    er: ElementRef,
+    zone: NgZone,
     logService: NwLoggerService) {
-    super(stats, cd, zone, logService);
+    super(stats, cd, er, zone, logService);
+  }
+
+  onNeedsUpdate(): void {
+    if (!this.detached) {
+      this.cd.markForCheck();
+    }
   }
 }

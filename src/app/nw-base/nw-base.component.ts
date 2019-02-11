@@ -1,6 +1,7 @@
 import {
   AfterContentChecked,
   AfterContentInit,
+  AfterViewChecked,
   ChangeDetectorRef,
   DoCheck,
   ElementRef,
@@ -11,9 +12,10 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild,
-  AfterViewChecked
+  ViewChild
 } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import {
   NwComponentStructure,
   NwComponentType,
@@ -33,6 +35,7 @@ export class NwBaseComponent
     AfterViewChecked,
     OnDestroy {
   @Input() componentStructure: NwComponentStructure;
+  @Input() globalClickCount = 0;
   @HostBinding('attr.data-depth') @Input() depth: number;
   name: string;
   @Input() parentName: string;
@@ -41,20 +44,33 @@ export class NwBaseComponent
   checkedCount = 0;
   changeCount = 0;
   contentCheckedCount = 0;
+  timesButtonClicked = 0;
   detached: boolean;
 
   @ViewChild('markForCheckOutsideAngular') markForCheckOutsideAngular: ElementRef<HTMLButtonElement>;
   @ViewChild('detectChangesOutsideAngular') detectChangesOutsideAngular: ElementRef<HTMLButtonElement>;
 
+  private onDestroy = new Subject<void>();
   private markForCheckListener: (event: MouseEvent) => void;
   private detectChangesListener: (event: MouseEvent) => void;
 
   constructor(
     public stats: NwStatisticsService,
     protected cd: ChangeDetectorRef,
+    protected er: ElementRef,
     protected zone: NgZone,
     private logService: NwLoggerService
   ) {
+    this.stats.statisticsReset$
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(() => {
+        this.checkedCount = 0;
+        this.changeCount = 0;
+        this.contentCheckedCount = 0;
+        this.creationCount = 0;
+        this.timesButtonClicked = 0;
+        this.onNeedsUpdate();
+      });
   }
 
   get mouseArea(): boolean {
@@ -64,6 +80,12 @@ export class NwBaseComponent
   set mouseArea(value: boolean) {
     if (value !== this.mouseArea) {
       this.setData('mouseArea', value);
+    }
+  }
+
+  onNeedsUpdate(): void {
+    if (this.detached) {
+      this.cd.detectChanges();
     }
   }
 
@@ -81,6 +103,7 @@ export class NwBaseComponent
       this.cd.detach();
     }
   }
+
   ngAfterViewChecked(): void {
     this.logService.logMessage(
       new NwLogMessage(
@@ -92,6 +115,9 @@ export class NwBaseComponent
   }
 
   ngOnDestroy(): void {
+    this.onDestroy.next();
+    this.onDestroy.complete();
+
     this.logService.logMessage(
       new NwLogMessage(
         NwLogType.LifecycleEvent,
@@ -110,22 +136,7 @@ export class NwBaseComponent
   }
 
   ngAfterContentInit(): void {
-    this.zone.runOutsideAngular(() => {
-      this.markForCheckListener = (_event: MouseEvent): void => {
-        this.cd.markForCheck();
-      };
-      this.markForCheckOutsideAngular.nativeElement.addEventListener(
-        'click',
-        this.markForCheckListener
-      );
-      this.detectChangesListener = (_event: MouseEvent): void => {
-        this.cd.detectChanges();
-      };
-      this.detectChangesOutsideAngular.nativeElement.addEventListener(
-        'click',
-        this.detectChangesListener
-      );
-    });
+    this.setupNonAngularListeners();
   }
 
   ngAfterContentChecked(): void {
@@ -164,6 +175,17 @@ export class NwBaseComponent
       );
     }
     this.changeCount++;
+  }
+
+  onButtonClick(): void {
+    this.timesButtonClicked++;
+    this.logService.logMessage(
+      new NwLogMessage(
+        NwLogType.LifecycleEvent,
+        this.depth,
+        `${this.name} button clicked`
+      )
+    );
   }
 
   markForCheck(): void {
@@ -208,6 +230,7 @@ export class NwBaseComponent
       this.detached = true;
       this.setData('detached', true);
       this.cd.detach();
+      this.cd.detectChanges();
     }
   }
 
@@ -238,5 +261,37 @@ export class NwBaseComponent
     const oldValue = this.componentStructure.data.get(key);
     this.componentStructure.data.set(key, value);
     return oldValue;
+  }
+
+  private setupNonAngularListeners() {
+    this.zone.runOutsideAngular(() => {
+      this.markForCheckListener = (_event: MouseEvent): void => {
+        this.onButtonClick();
+        console.log(`${this.name}: markForCheck being called outside of Angular`);
+        // this.zone.run(() => this.cd.markForCheck());
+        this.cd.markForCheck();
+      };
+      this.markForCheckOutsideAngular.nativeElement.addEventListener(
+        'click',
+        this.markForCheckListener
+      );
+      this.detectChangesListener = (_event: MouseEvent): void => {
+        this.onButtonClick();
+        console.log(`${this.name}: detectChanges being called outside of Angular. Detached: ${this.detached}`);
+        // this.zone.run(() => this.cd.detectChanges());
+        const wasDetached = this.detached;
+        if (wasDetached) {
+          this.cd.reattach();
+        }
+        this.cd.detectChanges();
+        if (wasDetached) {
+          this.cd.detach();
+        }
+      };
+      this.detectChangesOutsideAngular.nativeElement.addEventListener(
+        'click',
+        this.detectChangesListener
+      );
+    });
   }
 }

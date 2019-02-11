@@ -1,5 +1,5 @@
 <div class="nw-log-header">Log Messages: <button (click)="clear()">Clear</button></div>
-<div #logMessages class="nw-logs">
+<div #logMessages class="nw-logs" title="Shows log messages of what is happening in the application. Shows up to 500 logs. Separators are added after each gap in logs (determined by 500 ms time periods).">
   <div *ngFor="let log of logs" class="nw-log-message">
     <hr *ngIf="log.type == NwLogType.Bookmark"/>
     {{log.message}}

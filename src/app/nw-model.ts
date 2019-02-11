@@ -37,4 +37,12 @@ export class NwLogMessage {
   ) {
     this.message = ' '.repeat(indentation) + message;
   }
+
+  toString(): string {
+    if (this.type === NwLogType.Bookmark) {
+      return '--------------------------------------------------------------';
+    } else {
+      return this.message;
+    }
+  }
 }

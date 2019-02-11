@@ -4,13 +4,13 @@
 }
 .nw-app {
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 350px auto;
   grid-template-rows: auto, auto;
   margin: 4em;
 }
 app-nw-header {
   grid-column-start: 1;
-  grid-column-end: 2;
+  grid-column-end: 3;
   grid-row: 1;
 }
 app-nw-logs {

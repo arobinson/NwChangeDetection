@@ -22,6 +22,7 @@ export class NwLoggerService implements OnDestroy {
   }
 
   logMessage(log: NwLogMessage): void {
+    console.log(log.toString());
     this.handleLogsInBatch.next(log);
   }
 

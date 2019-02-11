@@ -1,4 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { NwLogMessage, NwLogType } from '../nw-model';
+import { NwLoggerService } from '../services/nw-logger.service';
 import { NwStatisticsService } from '../services/nw-statistics.service';
 
 @Component({
@@ -7,7 +9,24 @@ import { NwStatisticsService } from '../services/nw-statistics.service';
   styleUrls: ['./nw-header.component.css']
 })
 export class NwHeaderComponent implements OnInit, OnDestroy {
-  constructor(public stats: NwStatisticsService) {
+  @Input() clickCount: number = 0;
+  @Output() readonly clickCountChange = new EventEmitter<number>();
+
+  constructor(
+    public stats: NwStatisticsService,
+    private logService: NwLoggerService) {
+  }
+
+  onButtonClick() {
+    this.clickCount++;
+    this.clickCountChange.emit(this.clickCount);
+    this.logService.logMessage(
+      new NwLogMessage(
+        NwLogType.LifecycleEvent,
+        1,
+        `NwHeaderComponent global button clicked: ${this.clickCount}`
+      )
+    );
   }
 
   ngOnInit() {}

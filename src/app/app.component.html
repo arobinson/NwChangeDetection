@@ -1,12 +1,14 @@
 <div class="nw-app">
-  <app-nw-header></app-nw-header>
+  <app-nw-header [(clickCount)]="globalClickCount"></app-nw-header>
   <app-nw-logs></app-nw-logs>
   <div class="nw-components">
     <app-nw-default *ngIf="componentStructure.componentType == NwComponentType.Default"
       [depth]="0"
+      [globalClickCount]="globalClickCount"
       [componentStructure]="componentStructure"></app-nw-default>
     <app-nw-push *ngIf="componentStructure.componentType == NwComponentType.OnPush"
       [depth]="0"
+      [globalClickCount]="globalClickCount"
       [componentStructure]="componentStructure"></app-nw-push>
   </div>
 </div>

@@ -5,12 +5,12 @@ import {
   Component,
   DoCheck,
   ElementRef,
+  NgZone,
   OnDestroy,
   OnInit,
-  ViewChild,
-  NgZone
+  ViewChild
 } from '@angular/core';
-import { Subject, asyncScheduler } from 'rxjs';
+import { asyncScheduler, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NwLogMessage, NwLogType } from '../nw-model';
 import { NwLoggerService } from '../services/nw-logger.service';
@@ -31,7 +31,8 @@ export class NwLogsComponent
   constructor(
     private logger: NwLoggerService,
     private cd: ChangeDetectorRef,
-    private zone: NgZone) {
+    private zone: NgZone
+  ) {
     this.cd.detach();
   }
 
@@ -52,8 +53,7 @@ export class NwLogsComponent
     this.scrollToBottom();
   }
 
-  ngDoCheck(): void {
-  }
+  ngDoCheck(): void {}
 
   ngOnDestroy(): void {
     this.onDestroy.next();

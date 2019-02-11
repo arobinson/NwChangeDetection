@@ -6,6 +6,8 @@
   <div class="nw-creation">Changed: {{changeCount}}</div>
   <div class="nw-creation">Checked: {{checkedCount}}</div>
   <div class="nw-creation">Content Checked: {{contentCheckedCount}}</div>
+  <div class="nw-button-click">Button clicks: {{timesButtonClicked}}</div>
+  <div class="nw-global-click-count">Global clicks: {{globalClickCount}}</div>
 </div>
 <div class="nw-options">
   <label>
@@ -14,16 +16,18 @@
       <option [value]="NwComponentType.OnPush">Push</option>
     </select>
   </label>
-  <button *ngIf="detached" (click)="reattach()">reattach</button>
-  <button *ngIf="!detached" (click)="detach()">detach</button>
-  <button (click)="markForCheck()">markForCheck</button>
-  <button (click)="detectChanges()">detectChanges</button>
-  <button #markForCheckOutsideAngular>markForCheck (outside)</button>
-  <button #detectChangesOutsideAngular>detectChanges (outside)</button>
-  <button (click)="toggleMouseMoveArea()">{{mouseArea ? 'Hide' : 'Show' }} mouse move area</button>
+  <button *ngIf="detached" (click)="onButtonClick(); reattach()" title="Call reattach on the ChangeDetectorRef">reattach</button>
+  <button *ngIf="!detached" (click)="onButtonClick(); detach()" title="Call detach on the ChangeDetectorRef">detach</button>
+  <button (click)="onButtonClick(); markForCheck()" title="Call markForCheck on the ChangeDetectorRef. This should only be needed for OnPush components">markForCheck</button>
+  <button (click)="onButtonClick(); detectChanges()" title="Call detectChanges on the ChangeDetectorRef. This should only be needed for detached components">detectChanges</button>
+  <button #markForCheckOutsideAngular title="Call markForCheck on the ChangeDetectorRef, but with a click listener registered outside of the Angular NgZone">markForCheck (outside)</button>
+  <button #detectChangesOutsideAngular title="Call detectChanges on the ChangeDetectorRef, but with a click listener registered outside of the Angular NgZone">detectChanges (outside)</button>
+  <button (click)="onButtonClick(); toggleMouseMoveArea()" title="Show a mouse area that listens for mouse move events">{{mouseArea ? 'Hide' : 'Show' }} mouse move area</button>
+  <button (click)="onButtonClick();" title="Inclement button click count only">Update click count</button>
 </div>
 <div class="nw-mouse-area-parent">
-  <div *ngIf="mouseArea" class="nw-mouse-area" (mousemove)="onMouseMove($event)">
+  <div *ngIf="mouseArea" class="nw-mouse-area" (mousemove)="onMouseMove($event)"
+    title="DIV that listens for mouse move events, showing the performance hit of many change detection cycles">
     Generate mouse events on move
   </div>
 </div>
@@ -32,9 +36,11 @@
     <app-nw-default *ngIf="child.componentType == NwComponentType.Default"
       [depth]="depth + 1"
       [parentName]="name"
+      [globalClickCount]="globalClickCount"
       [componentStructure]="child"></app-nw-default>
     <app-nw-push *ngIf="child.componentType == NwComponentType.OnPush"
       [depth]="depth + 1"
+      [globalClickCount]="globalClickCount"
       [parentName]="name"
       [componentStructure]="child"></app-nw-push>
   </ng-container>
