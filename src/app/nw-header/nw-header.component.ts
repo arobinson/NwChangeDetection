@@ -33,4 +33,9 @@ export class NwHeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
   }
+
+  triggerTick(): void {
+    // No code necessary, by using (click), Angular will run the NgZone.
+    // Without the event handler, using an ApplicationRef or NgZone can also trigger the tick
+  }
 }

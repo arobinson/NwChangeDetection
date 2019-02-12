@@ -267,8 +267,7 @@ export class NwBaseComponent
     this.zone.runOutsideAngular(() => {
       this.markForCheckListener = (_event: MouseEvent): void => {
         this.onButtonClick();
-        console.log(`${this.name}: markForCheck being called outside of Angular`);
-        // this.zone.run(() => this.cd.markForCheck());
+        console.log(`${this.name}: markForCheck being called outside of Angular. Click count now: ${this.timesButtonClicked}`);
         this.cd.markForCheck();
       };
       this.markForCheckOutsideAngular.nativeElement.addEventListener(
@@ -277,16 +276,8 @@ export class NwBaseComponent
       );
       this.detectChangesListener = (_event: MouseEvent): void => {
         this.onButtonClick();
-        console.log(`${this.name}: detectChanges being called outside of Angular. Detached: ${this.detached}`);
-        // this.zone.run(() => this.cd.detectChanges());
-        const wasDetached = this.detached;
-        if (wasDetached) {
-          this.cd.reattach();
-        }
+        console.log(`${this.name}: detectChanges being called outside of Angular. Click count now: ${this.timesButtonClicked}`);
         this.cd.detectChanges();
-        if (wasDetached) {
-          this.cd.detach();
-        }
       };
       this.detectChangesOutsideAngular.nativeElement.addEventListener(
         'click',
