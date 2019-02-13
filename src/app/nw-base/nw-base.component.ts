@@ -16,24 +16,11 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import {
-  NwComponentStructure,
-  NwComponentType,
-  NwLogMessage,
-  NwLogType
-} from '../nw-model';
+import { NwComponentStructure, NwComponentType, NwLogMessage, NwLogType } from '../nw-model';
 import { NwLoggerService } from '../services/nw-logger.service';
 import { NwStatisticsService } from '../services/nw-statistics.service';
 
-export class NwBaseComponent
-  implements
-    OnInit,
-    OnChanges,
-    DoCheck,
-    AfterContentInit,
-    AfterContentChecked,
-    AfterViewChecked,
-    OnDestroy {
+export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewChecked, OnDestroy {
   @Input() componentStructure: NwComponentStructure;
   @Input() globalClickCount = 0;
   @HostBinding('attr.data-depth') @Input() depth: number;
@@ -61,16 +48,14 @@ export class NwBaseComponent
     protected zone: NgZone,
     private logService: NwLoggerService
   ) {
-    this.stats.statisticsReset$
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe(() => {
-        this.checkedCount = 0;
-        this.changeCount = 0;
-        this.contentCheckedCount = 0;
-        this.creationCount = 0;
-        this.timesButtonClicked = 0;
-        this.onNeedsUpdate();
-      });
+    this.stats.statisticsReset$.pipe(takeUntil(this.onDestroy)).subscribe(() => {
+      this.checkedCount = 0;
+      this.changeCount = 0;
+      this.contentCheckedCount = 0;
+      this.creationCount = 0;
+      this.timesButtonClicked = 0;
+      this.onNeedsUpdate();
+    });
   }
 
   get mouseArea(): boolean {
@@ -92,11 +77,7 @@ export class NwBaseComponent
   ngOnInit() {
     this.creationCount = ++this.componentStructure.componentCreationCount;
     this.logService.logMessage(
-      new NwLogMessage(
-        NwLogType.LifecycleEvent,
-        this.depth,
-        `${this.name} ngOnInit. Creation count: ${this.creationCount}`
-      )
+      new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngOnInit. Creation count: ${this.creationCount}`)
     );
     this.detached = this.getData('detached') === true;
     if (this.detached) {
@@ -105,34 +86,16 @@ export class NwBaseComponent
   }
 
   ngAfterViewChecked(): void {
-    this.logService.logMessage(
-      new NwLogMessage(
-        NwLogType.LifecycleEvent,
-        this.depth,
-        `${this.name} ngAfterViewChecked`
-      )
-    );
+    this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngAfterViewChecked`));
   }
 
   ngOnDestroy(): void {
     this.onDestroy.next();
     this.onDestroy.complete();
 
-    this.logService.logMessage(
-      new NwLogMessage(
-        NwLogType.LifecycleEvent,
-        this.depth,
-        `${this.name} ngOnDestroy`
-      )
-    );
-    this.markForCheckOutsideAngular.nativeElement.removeEventListener(
-      'click',
-      this.markForCheckListener
-    );
-    this.detectChangesOutsideAngular.nativeElement.removeEventListener(
-      'click',
-      this.detectChangesListener
-    );
+    this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngOnDestroy`));
+    this.markForCheckOutsideAngular.nativeElement.removeEventListener('click', this.markForCheckListener);
+    this.detectChangesOutsideAngular.nativeElement.removeEventListener('click', this.detectChangesListener);
   }
 
   ngAfterContentInit(): void {
@@ -141,61 +104,29 @@ export class NwBaseComponent
 
   ngAfterContentChecked(): void {
     this.contentCheckedCount++;
-    this.logService.logMessage(
-      new NwLogMessage(
-        NwLogType.LifecycleEvent,
-        this.depth,
-        `${this.name} ngAfterContentChecked`
-      )
-    );
+    this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngAfterContentChecked`));
   }
 
   ngDoCheck(): void {
-    this.logService.logMessage(
-      new NwLogMessage(
-        NwLogType.LifecycleEvent,
-        this.depth,
-        `${this.name} ngDoCheck`
-      )
-    );
+    this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngDoCheck`));
     this.checkedCount++;
   }
 
   ngOnChanges(_changes: SimpleChanges): void {
     if (!this.name) {
-      this.name = this.parentName
-        ? `${this.parentName}.${this.componentStructure.name}`
-        : this.componentStructure.name;
-      this.logService.logMessage(
-        new NwLogMessage(
-          NwLogType.LifecycleEvent,
-          this.depth,
-          `${this.name} ngOnChanges`
-        )
-      );
+      this.name = this.parentName ? `${this.parentName}.${this.componentStructure.name}` : this.componentStructure.name;
+      this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngOnChanges`));
     }
     this.changeCount++;
   }
 
   onButtonClick(): void {
     this.timesButtonClicked++;
-    this.logService.logMessage(
-      new NwLogMessage(
-        NwLogType.LifecycleEvent,
-        this.depth,
-        `${this.name} button clicked`
-      )
-    );
+    this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} button clicked`));
   }
 
   markForCheck(): void {
-    this.logService.logMessage(
-      new NwLogMessage(
-        NwLogType.HtmlEvent,
-        this.depth,
-        `${this.name} markForCheck called`
-      )
-    );
+    this.logService.logMessage(new NwLogMessage(NwLogType.HtmlEvent, this.depth, `${this.name} markForCheck called`));
     this.cd.markForCheck();
   }
 
@@ -208,25 +139,13 @@ export class NwBaseComponent
   }
 
   detectChanges(): void {
-    this.logService.logMessage(
-      new NwLogMessage(
-        NwLogType.HtmlEvent,
-        this.depth,
-        `${this.name} detectChanges called`
-      )
-    );
+    this.logService.logMessage(new NwLogMessage(NwLogType.HtmlEvent, this.depth, `${this.name} detectChanges called`));
     this.cd.detectChanges();
   }
 
   detach(): void {
     if (!this.detached) {
-      this.logService.logMessage(
-        new NwLogMessage(
-          NwLogType.HtmlEvent,
-          this.depth,
-          `${this.name} detached`
-        )
-      );
+      this.logService.logMessage(new NwLogMessage(NwLogType.HtmlEvent, this.depth, `${this.name} detached`));
       this.detached = true;
       this.setData('detached', true);
       this.cd.detach();
@@ -236,13 +155,7 @@ export class NwBaseComponent
 
   reattach(): void {
     if (this.detached) {
-      this.logService.logMessage(
-        new NwLogMessage(
-          NwLogType.HtmlEvent,
-          this.depth,
-          `${this.name} reattached`
-        )
-      );
+      this.logService.logMessage(new NwLogMessage(NwLogType.HtmlEvent, this.depth, `${this.name} reattached`));
       this.detached = false;
       this.setData('detached', false);
       this.cd.reattach();
@@ -270,19 +183,13 @@ export class NwBaseComponent
         console.log(`${this.name}: markForCheck being called outside of Angular. Click count now: ${this.timesButtonClicked}`);
         this.cd.markForCheck();
       };
-      this.markForCheckOutsideAngular.nativeElement.addEventListener(
-        'click',
-        this.markForCheckListener
-      );
+      this.markForCheckOutsideAngular.nativeElement.addEventListener('click', this.markForCheckListener);
       this.detectChangesListener = (_event: MouseEvent): void => {
         this.onButtonClick();
         console.log(`${this.name}: detectChanges being called outside of Angular. Click count now: ${this.timesButtonClicked}`);
         this.cd.detectChanges();
       };
-      this.detectChangesOutsideAngular.nativeElement.addEventListener(
-        'click',
-        this.detectChangesListener
-      );
+      this.detectChangesOutsideAngular.nativeElement.addEventListener('click', this.detectChangesListener);
     });
   }
 }

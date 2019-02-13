@@ -1,5 +1,5 @@
 {
-  "extends": "tslint:recommended",
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
   "rulesDirectory": [
     "codelyzer"
   ],
@@ -150,5 +150,5 @@
     "prefer-inline-decorator": {"severity": "warning"},
     "component-class-suffix": [true, "Component"],
     "directive-class-suffix": [true, "Directive"]
-  }
+  },
 }
