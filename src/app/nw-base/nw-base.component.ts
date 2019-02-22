@@ -115,8 +115,8 @@ export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContent
   ngOnChanges(_changes: SimpleChanges): void {
     if (!this.name) {
       this.name = this.parentName ? `${this.parentName}.${this.componentStructure.name}` : this.componentStructure.name;
-      this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngOnChanges`));
     }
+    this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngOnChanges`));
     this.changeCount++;
   }
 
