@@ -60,6 +60,7 @@ export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContent
   }
 
   get mouseArea(): boolean {
+    this.logService.logMessage(new NwLogMessage(NwLogType.Other, this.depth, `${this.name} mouseArea evaluated`));
     return this.getData('mouseArea') === true;
   }
 
