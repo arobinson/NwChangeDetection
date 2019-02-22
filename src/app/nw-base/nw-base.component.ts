@@ -12,7 +12,8 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  AfterViewInit
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -20,7 +21,7 @@ import { NwComponentStructure, NwComponentType, NwLogMessage, NwLogType } from '
 import { NwLoggerService } from '../services/nw-logger.service';
 import { NwStatisticsService } from '../services/nw-statistics.service';
 
-export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewChecked, OnDestroy {
+export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewChecked, OnDestroy, AfterViewInit {
   @Input() componentStructure: NwComponentStructure;
   @Input() globalClickCount = 0;
   @HostBinding('attr.data-depth') @Input() depth: number;
@@ -84,6 +85,9 @@ export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContent
       this.cd.detach();
     }
   }
+  ngAfterViewInit(): void {
+    this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngAfterViewInit`));
+  }
 
   ngAfterViewChecked(): void {
     this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngAfterViewChecked`));
@@ -99,6 +103,7 @@ export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContent
   }
 
   ngAfterContentInit(): void {
+    this.logService.logMessage(new NwLogMessage(NwLogType.LifecycleEvent, this.depth, `${this.name} ngAfterContentInit`));
     this.setupNonAngularListeners();
   }
 
