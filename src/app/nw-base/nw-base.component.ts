@@ -1,26 +1,11 @@
-import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewChecked,
-  ChangeDetectorRef,
-  DoCheck,
-  ElementRef,
-  HostBinding,
-  Input,
-  NgZone,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-  AfterViewInit
-} from '@angular/core';
+import { AfterContentChecked, AfterContentInit, AfterViewChecked, ChangeDetectorRef, DoCheck, ElementRef, HostBinding, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, AfterViewInit, Directive } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NwComponentStructure, NwComponentType, NwLogMessage, NwLogType } from '../nw-model';
 import { NwLoggerService } from '../services/nw-logger.service';
 import { NwStatisticsService } from '../services/nw-statistics.service';
 
+@Directive()
 export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewChecked, OnDestroy, AfterViewInit {
   @Input() componentStructure: NwComponentStructure;
   @Input() globalClickCount = 0;
