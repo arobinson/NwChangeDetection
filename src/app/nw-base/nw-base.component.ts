@@ -35,8 +35,8 @@ export class NwBaseComponent implements OnInit, OnChanges, DoCheck, AfterContent
   timesButtonClicked = 0;
   detached: boolean;
 
-  @ViewChild('markForCheckOutsideAngular') markForCheckOutsideAngular: ElementRef<HTMLButtonElement>;
-  @ViewChild('detectChangesOutsideAngular') detectChangesOutsideAngular: ElementRef<HTMLButtonElement>;
+  @ViewChild('markForCheckOutsideAngular', { static: true }) markForCheckOutsideAngular: ElementRef<HTMLButtonElement>;
+  @ViewChild('detectChangesOutsideAngular', { static: true }) detectChangesOutsideAngular: ElementRef<HTMLButtonElement>;
 
   private onDestroy = new Subject<void>();
   private markForCheckListener: (event: MouseEvent) => void;

@@ -25,7 +25,7 @@ export class NwLogsComponent
   implements OnInit, OnDestroy, AfterViewChecked, DoCheck {
   public readonly logs = new Array<NwLogMessage>();
   private onDestroy = new Subject<void>();
-  @ViewChild('logMessages') private logMessagesDiv: ElementRef<HTMLDivElement>;
+  @ViewChild('logMessages', { static: true }) private logMessagesDiv: ElementRef<HTMLDivElement>;
   NwLogType = NwLogType;
 
   constructor(
