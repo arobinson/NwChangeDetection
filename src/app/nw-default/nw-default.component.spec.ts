@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NwDefaultComponent } from './nw-default.component';
 
@@ -6,7 +6,7 @@ describe('NwComponentComponent', () => {
   let component: NwDefaultComponent;
   let fixture: ComponentFixture<NwDefaultComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ NwDefaultComponent ]
     })

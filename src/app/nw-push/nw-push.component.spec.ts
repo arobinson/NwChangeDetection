@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NwPushComponent } from './nw-push.component';
 
@@ -6,7 +6,7 @@ describe('NwPushComponent', () => {
   let component: NwPushComponent;
   let fixture: ComponentFixture<NwPushComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ NwPushComponent ]
     })

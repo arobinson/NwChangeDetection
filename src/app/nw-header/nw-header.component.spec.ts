@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NwHeaderComponent } from './nw-header.component';
 
@@ -6,7 +6,7 @@ describe('NwHeaderComponent', () => {
   let component: NwHeaderComponent;
   let fixture: ComponentFixture<NwHeaderComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ NwHeaderComponent ]
     })
