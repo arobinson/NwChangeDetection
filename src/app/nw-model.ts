@@ -1,5 +1,3 @@
-import { stringify } from '@angular/core/src/util';
-
 export interface NwComponentStructure {
   componentType: NwComponentType;
   inputData: any;
